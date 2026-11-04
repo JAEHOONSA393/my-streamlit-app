@@ -70,6 +70,16 @@ if submit:
         st.subheader("AI 답변")
         st.write(answer)
 
+        # TTS: AI 답변을 음성으로 변환
+        speech = client.audio.speech.create(
+            model="gpt-4o-mini-tts",
+            voice="alloy",
+            input=answer
+        )
+
+        # 음성 재생
+        st.audio(speech.content, format="audio/mpeg")
+
         # 대화 기록 저장
         st.session_state.messages.append({
             "question": transcript.text,
