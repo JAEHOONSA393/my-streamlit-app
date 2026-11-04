@@ -49,6 +49,10 @@ if submit:
     transcript = client.audio.transcriptions.create(
         model="whisper-1",
         file=("audio.wav", audio_value, "audio/wav"))
+    
+    # STT 인식 결과 화면에 표시
+    st.subheader("🎤 인식된 질문")
+    st.info(transcript.text)
 
     # 사용자 메시지
     input_messages.append({"role": "user", "content": transcript.text})
