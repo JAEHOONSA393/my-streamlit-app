@@ -49,7 +49,7 @@ if submit:
     transcript = client.audio.transcriptions.create(
         model="whisper-1",
         file=("audio.wav", audio_value, "audio/wav"))
-    
+
     # STT 인식 결과 화면에 표시
     st.subheader("🎤 인식된 질문")
     st.info(transcript.text)
@@ -69,3 +69,23 @@ if submit:
         # 응답 출력
         st.subheader("AI 답변")
         st.write(answer)
+
+        # 대화 기록 저장
+        st.session_state.messages.append({
+            "question": transcript.text,
+            "answer": answer
+        })
+
+        # 최근 대화 10개만 유지
+        st.session_state.messages = st.session_state.messages[-10:]
+
+# 최근 대화 기록 화면에 표시
+st.divider()
+st.subheader("📜 최근 대화 기록")
+
+for i, message in enumerate(
+    reversed(st.session_state.messages), 1
+):
+    with st.expander(f"대화 {i}: {message['question']}"):
+        st.write("🤖 에이블의 답변")
+        st.write(message["answer"])
